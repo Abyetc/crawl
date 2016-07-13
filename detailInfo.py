@@ -41,7 +41,7 @@ def get_detail_info(url):
     soup = bs4.BeautifulSoup(response.text)
 
     # 找出银行和优惠简介，也就是第一行的信息
-    title = soup.find('div', {'class' : 'p1'}).string.encode('latin1').strip()
+    title = soup.find('div', {'class': 'p1'}).string.encode('latin1').strip()
     pattern = re.compile(r'【(.*?)】')
     bank = re.findall(pattern, title)[0]
     pattern = re.compile(r'【.*?】(.*)')
@@ -52,12 +52,17 @@ def get_detail_info(url):
     print 'summary: ' + summary
 
     # 优惠的进一步描述
-    detail = soup.find('p', {'class': 'p1'}).string.encode('latin1').strip()
-    result_dict['description'] = detail
-    print 'description: ' + detail
+
+    description = soup.find('p', {'class': 'p1'}).string
+    if description is None:
+        description = ''
+    else:
+        description = description.encode('latin1').strip()
+    result_dict['description'] = description
+    print 'description: ' + description
 
     # 获取活动时间
-    p2 = soup.findAll('div', {'class' : 'p2'})
+    p2 = soup.findAll('div', {'class': 'p2'})
     data = str(p2[0]).encode('latin1')
     data = remove_blank(data)
     pattern = re.compile(r'span>(.*?)\(')
@@ -84,8 +89,8 @@ def get_detail_info(url):
     con_tit = soup.findAll("div", {"class": "con-tit"})
     activity_content = ''
     activity_detail = ''
-    result_dict['activity_content'] = ''
-    result_dict['activity_detail'] = ''
+    result_dict['discount_usage'] = ''
+    result_dict['discount_detail'] = ''
 
     for content in con_tit:
         string = content.string.encode('latin1')
@@ -99,19 +104,17 @@ def get_detail_info(url):
                     activity_content += img["src"] + '|'
                 activity_content += ';'
             result_dict['discount_usage'] = activity_content
-            print('discount content: ' + activity_content)
+
         if string == '活动细则':
             s = content.find_next_sibling().findAll('div',  {"class": "list-l"})[0]
             s = remove_blank(str(s))
             s = regular('>(.*?)</div>', s)
             activity_detail = my_encode(s[0]).replace('<br/><br/>', '<br/>')
             result_dict['discount_detail'] = activity_detail
-            print('discount detail: ' + activity_detail)
+    print('discount content: ' + result_dict['discount_usage'])
+    print('discount detail: ' + result_dict['discount_detail'])
     return result_dict
 
 
-discount_dict = get_detail_info('http://www.rong360.com//credit/youhui/890a775334c95f21c9f172a398f86a89')
-discount_dict['type'] = ''
-discount_dict['Characteristic'] = ''
-storeData.store_discount(discount_dict)
+
 
