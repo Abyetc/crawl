@@ -13,8 +13,8 @@ def store_discount(discount_dict):
     # sql = sql.encode('utf-8')
     print sql
     # 这里一定要手动指定字符编码，否则就会是乱码
-    db = MySQLdb.connect(host="10.22.99.109", user="root", passwd="abyjun", db="dealbridge", port=3306, charset='utf8')
-    # db = MySQLdb.connect(host="localhost", user="root", passwd="abyjun", db="dealbridge", port=3306, charset='utf8')
+    # db = MySQLdb.connect(host="10.22.99.109", user="root", passwd="abyjun", db="dealbridge", port=3306, charset='utf8')
+    db = MySQLdb.connect(host="localhost", user="root", passwd="abyjun", db="dealbridge", port=3306, charset='utf8')
     cursor = db.cursor()
 
     try:
@@ -28,3 +28,4 @@ def store_discount(discount_dict):
         db.rollback()
 
     db.close()
+

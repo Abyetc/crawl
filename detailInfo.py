@@ -42,6 +42,7 @@ def get_detail_info(url):
 
     # 找出银行和优惠简介，也就是第一行的信息
     title = soup.find('div', {'class': 'p1'}).string.encode('latin1').strip()
+    print(url)
     pattern = re.compile(r'【(.*?)】')
     bank = re.findall(pattern, title)[0]
     pattern = re.compile(r'【.*?】(.*)')
@@ -53,11 +54,11 @@ def get_detail_info(url):
 
     # 优惠的进一步描述
 
-    description = soup.find('p', {'class': 'p1'}).string
-    if description is None:
+    description = soup.find('p', {'class': 'p1'})
+    if description is None or description.string is None:
         description = ''
     else:
-        description = description.encode('latin1').strip()
+        description = description.string.encode('latin1').strip()
     result_dict['description'] = description
     print 'description: ' + description
 
@@ -117,4 +118,5 @@ def get_detail_info(url):
 
 
 
-
+# http://www.rong360.com/credit/youhui/2956c5e75d1461079f52deb53f0900c1
+# 再调整一下每个的存储长度

@@ -42,7 +42,7 @@ def get_short_description_page(url):
     li = content.findAll("li", {"class": "clearfix"})
     for discount in li:
         img = discount.find("img")['src']
-        link = 'http://www.rong360.com/' + discount.find("a")['href']
+        link = 'http://www.rong360.com' + discount.find("a")['href']
         print(img)
         print(link)
         discount_dict = detailInfo.get_detail_info(link)
@@ -52,14 +52,30 @@ def get_short_description_page(url):
         storeData.store_discount(discount_dict)
 
 
+class CrawlThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+    def run(self):
+        global p_num, total_page, con
+        while p_num < total_page:
+            con.acquire()
+            p_num += 1
+            con.notify()
+            con.release()
+
+            url = 'http://www.rong360.com/credit/f-youhui'
+            if p_num != 1:
+                url += '-p' + str(p_num)
+            get_short_description_page(url)
+
+
+total_page = get_num_of_result('http://www.rong360.com/credit/f-youhui')
+thread_num = 20
+p_num = 0
 con = threading.Condition()
-area_code = 0
 
-my_url = 'http://www.rong360.com/credit/f-youhui'
-
-# 同时开启20个线程去抓取它
-for i in range(1):
-    GetPage().start()
-
+for i in range(thread_num):
+    CrawlThread().start()
 
 
