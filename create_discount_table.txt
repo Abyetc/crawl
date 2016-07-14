@@ -12,5 +12,8 @@ create table Discount(
    discount_detail text,
    type varchar(30),
    Characteristic varchar(30),
-   img varchar(255)
+   img varchar(255),
+   merchant_description varchar(255),
+   merchant_location varchar(255),
+   merchant_call varchar(20)
 );
