@@ -1,2 +1,2 @@
-# crawl
-cawl some coupons of different credit cards .
+Crawl discount messages of credit cards from http://www.rong360.com/.
+There are around 18,300 discounts.

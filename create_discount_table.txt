@@ -10,7 +10,7 @@ create table Discount(
    area varchar(20),
    discount_usage text,
    discount_detail text,
-   type varchar(30),
+   classify varchar(30),
    Characteristic varchar(30),
    img varchar(255),
    merchant_description varchar(255),
